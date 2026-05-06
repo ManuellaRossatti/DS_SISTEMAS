@@ -5,29 +5,3 @@ Python
 Python
 Python
 Python
-if tempo == "30 min" "30 minutos" "30":
-     print("O valor a ser pago é de 10 reais")
-elif tempo == "1h" "1 hora" "1hora" "uma hora":
-    print("O valor a ser pago é de 15 reais")
-elif tempo == 
-# 9. O Loop Eterno
-# tentativas = 1
-# while tentativas <= 3:
-#     print("Tentando conectar...")
-# O código deveria parar após 3 tentativas
-
-#Corrigido:
-# tentativas = 1
-# while tentativas <= 3:
-#     print("Tentando conectar...")
-#     break
-
-
-#10. A Senha Teimosa
-# O programa deve pedir a senha até que o usuário digite "python123"
-senha = ""
-while senha == "python123":
-    senha = input("Digite a senha secreta: ")
-print("Acesso concedido!")
-
-# Corrigido:
