@@ -3,8 +3,8 @@ print("Meu primeiro robô" \
 "Nome: Bruno Vader")
 
 print("Peças:")
-print("COR: Vermelha (defeituosas)")
-print("COR: Verde (boas)")
+print("COR: Vermelho (peça defeituosa)")
+print("COR: Verde (peça boa)")
 cor = input("Qual cor você deseja?")
 if cor == "Vermelho":
     andar = int(input("Quantos passos deseja andar?"))
@@ -15,6 +15,7 @@ if cor == "Vermelho":
         print("agachar...")
         print("Agarrar peça Vermelha...")
         print("Levantar...")
+        print("Agora volte...")
         graus = int(input("Quantos graus você quer virar a direita? "))
         if graus == 0:
             print("Não gire.")
@@ -44,6 +45,7 @@ elif cor == "Verde":
         print("agachar...")
         print("Agarrar peça Verde...")
         print("Levantar...")
+        print("Agora volte...")
         graus3 = int(input("Quantos graus você quer virar a direita? "))
         if graus3 == 0:
             print("Não gire.")
