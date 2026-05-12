@@ -68,6 +68,7 @@ while True:
         print(f"Placa: {placa} | Modelo: {modelo} | Tempo:{total_permanencia} horas | Valor: R$ {valor_estacionamento}")
     else:
         print("Encerrando sistema.")
+        
     
     
 
