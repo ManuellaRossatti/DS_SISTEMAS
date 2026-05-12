@@ -1,170 +1,124 @@
-# 🐍 MEU PORTIFÒLIO DE PYTHON
-Meu Portfólio Python – Manu Rossatt
-"Da simulação de um robô industrial à lógica de programação sólida"
+# 🐍 Meu Portfólio de Python
+> **Manu Rossatt**  
+> *"Da simulação de um robô industrial à lógica de programação sólida"*
 
-📌 Sobre Este Portfólio
+---
+
+## 📌 Sobre Este Portfólio
 Este repositório documenta minha jornada de aprendizado em Python, demonstrando os conceitos que já domino através de projetos práticos e exercícios resolvidos.
 
-# 🧠 Conceitos Dominados
+---
 
-Conceito	Aplicação no meu código
+## 🧠 Conceitos Dominados
 
-✅ Variáveis	Armazenamento de cores, passos, ângulos
 
-✅ Entrada de dados	input() para interação com usuário
+| Conceito | Aplicação no meu código |
+| :--- | :--- |
+| ✅ **Variáveis** | Armazenamento de cores, passos, ângulos |
+| ✅ **Entrada de dados** | `input()` para interação com usuário |
+| ✅ **Conversão de tipos** | `int(input())`, `float()` |
+| ✅ **Estruturas condicionais** | `if`, `elif`, `else` |
+| ✅ **Operadores relacionais** | `==`, `<`, `>`, `<=`, `>=` |
+| ✅ **Operadores lógicos** | `and`, `or` |
+| ✅ **F-strings** | Formatação moderna com `f"texto {variavel}"` |
+| ✅ **Laço while** | Contagem regressiva da bateria |
+| ✅ **Laço for** | Contagem de curtidas |
+| ✅ **Tratamento de intervalos** | Uso de `range()` |
+| ✅ **Listas** | Exercícios preparatórios e coleções |
+| ✅ **Debug/Refatoração** | Resolução dos 10 "Caça-Erros" |
 
-✅ Conversão de tipos	int(input()), float()
+---
 
-✅ Estruturas condicionais	if, elif, else
+## 🚀 Projetos em Destaque
 
-✅ Operadores relacionais	==, <, >, <=, >=
+### 1️⃣ Simulador de Robô Industrial
+**Arquivo:** `robo_pecas.py`  
+Simulação de um robô que coleta peças boas (verdes) e defeituosas (vermelhas) com validações rígidas:
+*   **Passos:** 0-66 (vermelha) / 0-36 (verde).
+*   **Ações:** Sequência completa de *Andar → Agachar → Agarrar → Levantar → Voltar → Entregar*.
 
-✅ Operadores lógicos	and, or (usados indiretamente)
-
-✅ F-strings	Formatação moderna com f"texto {variavel}"
-
-✅ Laço while	Contagem regressiva da bateria
-
-✅ Laço for	Contagem de curtidas
-
-✅ Tratamento de intervalos	range()
-
-✅ Listas	(exercícios preparatórios)
-
-✅ Debug/Identificação de erros	Resolução dos 10 "Caça-Erros"
-
-🚀 Projetos em Destaque
-
-1️⃣ Simulador de Robô Industrial
-
-Arquivo: robo_pecas.py
-
-Robô que coleta peças boas (verdes) e defeituosas (vermelhas) com controle de:
-
-Passos (0-66 para vermelha / 0-36 para verde)
-
-Rotação à direita/esquerda
-
-Sequência completa: andar → agachar → agarrar → levantar → voltar → entregar
-## Trecho do código
-
+```python
+# Exemplo de validação lógica
 if cor == "Vermelho":
+    andar = int(input("Quantos passos? (0-66): "))
+    if 0 <= andar <= 66:
+        print("Movimentando braço robótico...")
+    else:
+        print("Erro: Limite de segurança excedido!")
+```
 
-    andar = int(input("Quantos passos? (0-66)"))
+### 2️⃣ Desafio "O Caça-Erros" 🐛
+Identificação e correção de 10 problemas comuns de sintaxe e lógica:
 
-    # ... validações e ações
 
-## 2️⃣ Desafio "O Caça-Erros" 🐛
+| nº | Problema | Erro Comum | Minha Solução |
+| :--- | :--- | :--- | :--- |
+| 1 | Idade | `input()` sem `int()` | Conversão explícita |
+| 2 | Escrita | Concatenação errada | Uso de f-strings |
+| 3 | Indentação | `if` sem espaçamento | Padronização PEP 8 |
+| 4 | Faltando `:` | Erro de sintaxe no `if` | Adição dos dois pontos |
+| 5 | `=` vs `==` | Atribuição na comparação | Uso correto de `==` |
+| 9 | Loop infinito | Sem incremento | `tentativas += 1` |
+| 10 | `while` invertido | `==` ao invés de `!=` | Operador de diferença |
 
-10 problemas identificados e corrigidos:
+---
 
-##	Problema	Erro Comum	Minha Solução
-1	Idade	input() sem int()	Conversão explícita
+## 🛠️ Utilitários Práticos
 
-2	Escrita	Concatenação errada	Uso de f-strings
+Abaixo, alguns exemplos de lógica aplicada para automação de cálculos simples:
 
-3	Indentação	if sem espaçamento	Padronização PEP 8
-
-4	Faltando :	if condicao sem dois pontos	Sintaxe correta
-
-5	= vs ==	Atribuição no lugar de comparação	Uso correto do operador
-
-6	Tipo misturado	str + int	Conversão ou f-string
-
-7	Ordem dos if/elif	Condições mal organizadas	Hierarquia lógica
-
-8	range()	range(5) vs range(1,6)	Parâmetros corretos
-
-9	Loop infinito	Sem incremento	tentativas += 1
-
-10	while invertido	== ao invés de !=	Operador correto
-
-3️⃣ Utilitários Práticos
-python
-## Calculadora de Mesada
-total = valor_semana * 4
-
-## Conversor GB → MB
-megas = gigabytes * 1024
-
-## Média Escolar
-
+```python
+# Média Escolar
 media = (matematica + portugues) / 2
 
-## Idade em dias
-
-dias_vividos = idade * 365
-
-4️⃣ Controle de Fluxo Interativo
-
-Bateria do Celular (loop com delay):
-
-
-python
-
+# Controle de Bateria (Loop com delay)
+import time
 while bateria >= 10:
-
     print(f"Bateria: {bateria}%")
-
     bateria -= 10
-
     time.sleep(1)
+```
 
-Carrinho de Compras:
+---
 
-python
+## 📁 Estrutura do Repositório
 
-while produto.lower() != "sair":
-
-    produto = input("Produto: ")
-
-    contador += 1
-
-📁 Estrutura do Repositório
-
-text
-
+```text
 python-portfolio/
-
 │
 ├── projetos/
 │   ├── robo_industrial.py      # Simulador do robô
 │   ├── caça_erros.py           # 10 erros corrigidos
 │   └── utilitarios.py          # Calculadoras e conversores
 │
-
 ├── exercicios/
 │   ├── condicionais/
 │   ├── loops/
 │   └── tipos_dados/
 │
-├── README.md                   # Este arquivo
-└── requirements.txt            # Dependências (se houver)
+└── README.md                   # Documentação do portfólio
+```
+
+---
 
 ## 🎯 Habilidades Demonstradas
-🔹 Pensamento lógico – sequenciamento de ações do robô
+*   **Pensamento Lógico:** Sequenciamento de ações complexas.
+*   **Validação de Dados:** Proteção contra entradas inválidas do usuário.
+*   **Código Limpo:** Organização seguindo as recomendações da comunidade.
+*   **Resolução de Problemas:** Capacidade de *debugging* e análise crítica.
 
-🔹 Validação de entrada – limites (0-66, 0-176, etc.)
+---
 
-🔹 Experiência do usuário – mensagens claras e feedback
+## 📈 Próximos Passos (Em estudo)
+- [ ] Funções (`def`)
+- [ ] Dicionários
+- [ ] Tratamento de exceções (`try/except`)
+- [ ] Bibliotecas de análise de dados (Pandas/Matplotlib)
 
-🔹 Debugging – identificação e correção de 10 erros comuns
+---
 
-🔹 Código limpo – organização e comentários estratégicos
+## 📫 Contato
+**Manu Rossatt**  
+[GitHub](https://github.com) • [LinkedIn](https://linkedin.com)
 
-📈 Próximos Passos (Em estudo)
-Funções (def)
-
-Listas e dicionários
-
-Tratamento de exceções (try/except)
-
-Manipulação de arquivos
-
-Bibliotecas externas (pandas, matplotlib)
-
-📫 Contato
-Manu Rossatt
-GitHub • 
-
-"Cada linha de código é um passo em direção a uma solução."
+*"Cada linha de código é um passo em direção a uma solução."*
