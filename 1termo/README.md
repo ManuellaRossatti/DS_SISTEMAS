@@ -34,7 +34,9 @@ Conceito	Aplicação no meu código
 ✅ Debug/Identificação de erros	Resolução dos 10 "Caça-Erros"
 
 🚀 Projetos em Destaque
+
 1️⃣ Simulador de Robô Industrial
+
 Arquivo: robo_pecas.py
 
 Robô que coleta peças boas (verdes) e defeituosas (vermelhas) com controle de:
@@ -44,15 +46,19 @@ Passos (0-66 para vermelha / 0-36 para verde)
 Rotação à direita/esquerda
 
 Sequência completa: andar → agachar → agarrar → levantar → voltar → entregar
-# Trecho do código
+## Trecho do código
+
 if cor == "Vermelho":
+
     andar = int(input("Quantos passos? (0-66)"))
+
     # ... validações e ações
 
-    2️⃣ Desafio "O Caça-Erros" 🐛
+## 2️⃣ Desafio "O Caça-Erros" 🐛
+
 10 problemas identificados e corrigidos:
 
-#	Problema	Erro Comum	Minha Solução
+##	Problema	Erro Comum	Minha Solução
 1	Idade	input() sem int()	Conversão explícita
 
 2	Escrita	Concatenação errada	Uso de f-strings
@@ -75,40 +81,58 @@ if cor == "Vermelho":
 
 3️⃣ Utilitários Práticos
 python
-# Calculadora de Mesada
+## Calculadora de Mesada
 total = valor_semana * 4
 
-# Conversor GB → MB
+## Conversor GB → MB
 megas = gigabytes * 1024
 
-# Média Escolar
+## Média Escolar
+
 media = (matematica + portugues) / 2
 
-# Idade em dias
+## Idade em dias
+
 dias_vividos = idade * 365
+
 4️⃣ Controle de Fluxo Interativo
+
 Bateria do Celular (loop com delay):
 
+
 python
+
 while bateria >= 10:
+
     print(f"Bateria: {bateria}%")
+
     bateria -= 10
+
     time.sleep(1)
+
 Carrinho de Compras:
 
 python
+
 while produto.lower() != "sair":
+
     produto = input("Produto: ")
+
     contador += 1
+
 📁 Estrutura do Repositório
+
 text
+
 python-portfolio/
+
 │
 ├── projetos/
 │   ├── robo_industrial.py      # Simulador do robô
 │   ├── caça_erros.py           # 10 erros corrigidos
 │   └── utilitarios.py          # Calculadoras e conversores
 │
+
 ├── exercicios/
 │   ├── condicionais/
 │   ├── loops/
@@ -116,7 +140,8 @@ python-portfolio/
 │
 ├── README.md                   # Este arquivo
 └── requirements.txt            # Dependências (se houver)
-🎯 Habilidades Demonstradas
+
+## 🎯 Habilidades Demonstradas
 🔹 Pensamento lógico – sequenciamento de ações do robô
 
 🔹 Validação de entrada – limites (0-66, 0-176, etc.)
