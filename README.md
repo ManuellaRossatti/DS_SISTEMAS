@@ -1,5 +1,5 @@
-#  MEU PORTIFÒLIO DE PYTHON
-🐍 Meu Portfólio Python – Manu Rossatt
+# 🐍 MEU PORTIFÒLIO DE PYTHON
+Meu Portfólio Python – Manu Rossatt
 "Da simulação de um robô industrial à lógica de programação sólida"
 
 📌 Sobre Este Portfólio
