@@ -58,7 +58,7 @@
 #     print(f"A contagem de palavras python é de... {contagem}")
 
 # Execução de comandos do sistema 
-import os #importa o módulo "os" para interagir com o sistema operacional "operating system"
+# import os #importa o módulo "os" para interagir com o sistema operacional "operating system"
 # Onde estou?
 # print(os.getcwd())
 # # Listar arquivos na pasta
@@ -150,8 +150,8 @@ import os #importa o módulo "os" para interagir com o sistema operacional "oper
 # print("Coelhos:",filial2["coelhos"])
 
 # Exemplo 2: Desligar o PC:
-with open("desliga.bat", "w") as desligar:
-    desligar.write("Shutdown -s -t 60 -c \"Desligamento programado para daqui a 1 hora. Salve seu trabalho!\"")
+# with open("desliga.bat", "w") as desligar:
+#     desligar.write("Shutdown -s -t 60 -c \"Desligamento programado para daqui a 1 hora. Salve seu trabalho!\"")
     # -s comando para desligar
     # -t tempo definir
     # -a cancelar desligamento
