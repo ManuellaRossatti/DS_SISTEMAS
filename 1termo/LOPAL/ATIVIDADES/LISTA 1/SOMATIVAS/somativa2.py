@@ -293,23 +293,23 @@ from tkinter import messagebox
 
 # janela = tk.Tk()
 # janela.title("Cálculo de Descarte")
-# janela.geometry("500x500")
-# janela.configure(bg="#0e474b")
+# janela.geometry("250x250")
+# janela.configure(bg="#6978bb")
     
 # lbl_mensagem = tk.Label(janela, text="Digite o total de peças produzidas: ")
-# lbl_mensagem.grid(row=0, column=0, pady=10, padx=10)
+# lbl_mensagem.grid(row=0, column=1, pady=10, padx=10)
 
 # lbl_mensagem = tk.Label(janela, text="Digite o total de peças defeituosas: ")
-# lbl_mensagem.grid(row=2, column=0, pady=10, padx=10)
+# lbl_mensagem.grid(row=2, column=1, pady=10, padx=10)
 
 # total_produzidas = tk.Entry(janela, font=("Arial", 12))
-# total_produzidas.grid(row=1, column=0, pady=10, padx=10)
+# total_produzidas.grid(row=1, column=1, pady=10, padx=10)
 
 # total_defeituosas = tk.Entry(janela, font=("Arial", 12))
-# total_defeituosas.grid(row=3, column=0, pady=10, padx=10)
+# total_defeituosas.grid(row=3, column=1, pady=10, padx=10)
 
 # btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, bg="#111110", font=("Arial", 11, "bold"),  fg="#FFF")
-# btn_mensagem.grid(row=4, column=0, padx=10, pady=10)
+# btn_mensagem.grid(row=4, column=1, padx=10, pady=10)
 
 
 
