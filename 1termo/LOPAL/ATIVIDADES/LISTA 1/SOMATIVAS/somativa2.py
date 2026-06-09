@@ -242,34 +242,142 @@ from tkinter import messagebox
 # iniciar.
 
 
-def janela_bemvindo():
-    sensor_porta = sensor.get().lower()
-    botao_emergencia = emergencia.get().lower()
-    if sensor_porta == "" and botao_emergencia == "": 
-        messagebox.showwarning("Aviso!", "Digite as informações! ")
-    elif sensor_porta == "fechada":
-        messagebox.showinfo("A", "Alimentos")
-    elif sensor_porta == "E":
-        messagebox.showinfo("E", "Eletrônicos")
-    else:
-        messagebox.showwarning("!", "Desconhecido!")
+# def janela_bemvindo():
+#     sensor_porta = sensor.get().lower()
+#     botao_emergencia = emergencia.get().lower()
+#     if sensor_porta == "" and botao_emergencia == "": 
+#         messagebox.showwarning("Aviso!", "Digite as informações! ")
+#     elif sensor_porta == "fechada" and botao_emergencia == "desligado":
+#         messagebox.showinfo("Máquina Ligada", "A máquina já pode ser iniciada!")
+#     else:
+#         messagebox.showerror("Erro!", "A máquina não pode ser iniciada!")
 
 
-
-janela = tk.Tk()
-janela.title("Segurança de operação")
-janela.geometry("400x400")
-janela.configure(bg="#0e474b")
+# janela = tk.Tk()
+# janela.title("Segurança de operação")
+# janela.geometry("300x200")
+# janela.configure(bg="#0e474b")
     
-lbl_mensagem = tk.Label(janela, text="Digite o código do produto: ")
-lbl_mensagem.grid(row=0, column=1, pady=10, padx=10)
+# lbl_mensagem = tk.Label(janela, text="A porta está fechada ou aberta? ")
+# lbl_mensagem.grid(row=0, column=0, pady=10, padx=10)
 
-sensor = tk.Entry(janela, font=("Arial", 12))
-sensor.grid(row=1, column=1, pady=10, padx=10)
+# lbl_mensagem = tk.Label(janela, text="O botão de emergência está ligado ou desligado? ")
+# lbl_mensagem.grid(row=2, column=0, pady=10, padx=10)
 
-btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, bg="#111110", font=("Arial", 11, "bold"),  fg="#FFF")
-btn_mensagem.grid(row=4, column=1, padx=10, pady=10)
+# sensor = tk.Entry(janela, font=("Arial", 12))
+# sensor.grid(row=1, column=0, pady=10, padx=10)
+
+# emergencia = tk.Entry(janela, font=("Arial", 12))
+# emergencia.grid(row=3, column=0, pady=10, padx=10)
+
+# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, bg="#111110", font=("Arial", 11, "bold"),  fg="#FFF")
+# btn_mensagem.grid(row=4, column=0, padx=10, pady=10)
 
 
 
-janela.mainloop()
+# janela.mainloop()
+
+# Cálculo de Descarte: Peça o total de peças produzidas e o total de defeituosas. Se
+# o descarte for maior que 5% do total, exiba "Revisar Processo", caso contrário,
+# "Processo Otimizado".
+
+
+# def janela_bemvindo():
+#     produzidas = int(total_produzidas.get())
+#     descarte = int(total_defeituosas.get())
+#     if descarte > 0.05 * produzidas: 
+#         messagebox.showwarning("Aviso!", "Revisar Processo")
+#     else:
+#         messagebox.showinfo("Info!", "Processo Otimizado")
+
+
+# janela = tk.Tk()
+# janela.title("Cálculo de Descarte")
+# janela.geometry("500x500")
+# janela.configure(bg="#0e474b")
+    
+# lbl_mensagem = tk.Label(janela, text="Digite o total de peças produzidas: ")
+# lbl_mensagem.grid(row=0, column=0, pady=10, padx=10)
+
+# lbl_mensagem = tk.Label(janela, text="Digite o total de peças defeituosas: ")
+# lbl_mensagem.grid(row=2, column=0, pady=10, padx=10)
+
+# total_produzidas = tk.Entry(janela, font=("Arial", 12))
+# total_produzidas.grid(row=1, column=0, pady=10, padx=10)
+
+# total_defeituosas = tk.Entry(janela, font=("Arial", 12))
+# total_defeituosas.grid(row=3, column=0, pady=10, padx=10)
+
+# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, bg="#111110", font=("Arial", 11, "bold"),  fg="#FFF")
+# btn_mensagem.grid(row=4, column=0, padx=10, pady=10)
+
+
+
+# janela.mainloop()
+
+# Validação de Medida: Uma peça deve ter entre 9.8mm e 10.2mm. Peça a medida e
+# diga se está dentro da tolerância, acima ou abaixo.
+
+
+# def janela_bemvindo():
+#     medida = float(medida_correta.get())
+#     if medida >= 9.8 and medida <= 10.2:
+#         messagebox.showinfo("Info!", "A medida está dentro da tolerância!")
+#     elif medida < 9.8:
+#         messagebox.showwarning("Info!", "A medida está abaixo da tolerância!")
+#     elif medida > 10.2:
+#         messagebox.showwarning("Info!", "A medida está acima da tolerância!")
+#     else:
+#         messagebox.showerror("Aviso!", "Por favor, forneça a informação!")
+
+
+# janela = tk.Tk()
+# janela.title("Validação de Medida")
+# janela.geometry("200x200")
+# janela.configure(bg="#0e474b")
+    
+# lbl_mensagem = tk.Label(janela, text="Digite a medida da peça: ")
+# lbl_mensagem.grid(row=0, column=0, pady=10, padx=10)
+
+# medida_correta = tk.Entry(janela, font=("Arial", 12))
+# medida_correta.grid(row=1, column=0, pady=10, padx=10)
+
+# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, bg="#111110", font=("Arial", 11, "bold"),  fg="#FFF")
+# btn_mensagem.grid(row=4, column=0, padx=10, pady=10)
+
+
+
+# janela.mainloop()
+
+
+# 10.Contagem Regressiva de Setup: Use um for para fazer uma contagem regressiva
+# de 10 até 1 para o início de uma prensa, e finalize com "Prensa Ativada!".
+
+
+# def janela_bemvindo():
+#     prensa = int(prensa_iniciar.get())
+#     if prensa == 1:
+#         for prensa in range(10, 1,-1):
+#             messagebox.showinfo("Info!", f"Prensa Ativada! Em {prensa}")
+#     else:
+#         messagebox.showwarning("Aviso!", "Não é possível iniciar a prensa!")
+
+# janela = tk.Tk()
+# janela.title("Contagem Regressiva de Setup")
+# janela.geometry("400x400")
+# janela.configure(bg="#621e8a")
+
+# lbl_mensagem = tk.Label(janela, text="Digite 1 caso queira iniciar a prensa: ")
+# lbl_mensagem.grid(row=0, column=0, pady=10, padx=10)
+
+# prensa_iniciar = tk.Entry(janela, font=("Arial", 12))
+# prensa_iniciar.grid(row=1, column=0, pady=10, padx=10)
+
+# btn_mensagem = tk.Button(janela, text="Clique aqui para iniciar a prensa", command=janela_bemvindo, bg="#111110", font=("Arial", 11, "bold"),  fg="#FFF")
+# btn_mensagem.grid(row=4, column=0, padx=10, pady=10)
+
+
+
+# janela.mainloop()
+
+
