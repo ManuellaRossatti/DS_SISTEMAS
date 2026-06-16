@@ -4,47 +4,52 @@
 import tkinter as tk
 from tkinter import messagebox
 
+
 # def janela_bemvindo():
-#     turno = turno_operador.get()
-#     nome = nome_operador.get()
-#     if nome == "" and turno == "": 
-#         messagebox.showarning("Aviso!", "Digite seu nome: ")
-#         messagebox.showarning("Digite seu turno: ")
+#     turno = turno_operador.get().strip()
+#     nome = nome_operador.get().strip()
+
+#     if not nome and not turno:
+#         messagebox.showwarning("Aviso!", "Digite seu nome e seu turno.")
+#     elif not nome:
+#         messagebox.showwarning("Aviso!", "Digite seu nome.")
+#     elif not turno:
+#         messagebox.showwarning("Aviso!", "Digite seu turno.")
 #     else:
-#         messagebox.showinfo("Bem-Vindo", f"Operador {nome} registrado no Turno {turno}. Boa jornada")
-    
+#         messagebox.showinfo("Bem-vindo", f"Operador {nome} registrado no Turno {turno}. Boa jornada")
+
 
 # janela = tk.Tk()
 # janela.title("Operação")
-# janela.geometry("550x550")
+# janela.geometry("550x320")
 # janela.configure(bg="#63201e")
-    
-# lbl_mensagem = tk.Label(janela, text="Digite seu nome: ")
-# lbl_mensagem.grid(row=0, column=0, pady=10, padx=10)
 
-# lbl_mensagem = tk.Label(janela, text="Turno A ")
-# lbl_mensagem.grid(row=2, column=1, pady=10, padx=10)
-
-# lbl_mensagem = tk.Label(janela, text="Turno B ")
-# lbl_mensagem.grid(row=3, column=1, pady=10, padx=10)
-
-# lbl_mensagem= tk.Label(janela, text="Turno C ")
-# lbl_mensagem.grid(row=4, column=1, pady=10, padx=10)
-
-
-# lbl_mensagem = tk.Label(janela, text="Digite seu turno: ")
-# lbl_mensagem.grid(row=5, column=0, pady=10, padx=10)
-
-# turno_operador = tk.Entry(janela, font=("Arial", 12))
-# turno_operador.grid(row=5, column=1, pady=10, padx=10)
+# label_nome = tk.Label(janela, text="Digite seu nome:", bg="#63201e", fg="white", font=("Arial", 12))
+# label_nome.grid(row=0, column=0, pady=10, padx=10, sticky="w")
 
 # nome_operador = tk.Entry(janela, font=("Arial", 12))
-# nome_operador.grid(row=0, column=1, pady=10, padx=10)
+# nome_operador.grid(row=0, column=1, pady=10, padx=10, sticky="w")
 
+# label_turno = tk.Label(janela, text="Digite seu turno:", bg="#63201e", fg="white", font=("Arial", 12))
+# label_turno.grid(row=1, column=0, pady=10, padx=10, sticky="w")
 
-# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo)
-# btn_mensagem.grid(row=6, column=1, padx=10, pady=10)
+# turno_operador = tk.Entry(janela, font=("Arial", 12))
+# turno_operador.grid(row=1, column=1, pady=10, padx=10, sticky="w")
 
+# label_titulos = tk.Label(janela, text="Turnos disponíveis:", bg="#63201e", fg="white", font=("Arial", 12, "bold"))
+# label_titulos.grid(row=2, column=0, columnspan=2, pady=(20, 5), padx=10, sticky="w")
+
+# label_turno_a = tk.Label(janela, text="Turno A", bg="#63201e", fg="white", font=("Arial", 11))
+# label_turno_a.grid(row=3, column=0, pady=2, padx=10, sticky="w")
+
+# label_turno_b = tk.Label(janela, text="Turno B", bg="#63201e", fg="white", font=("Arial", 11))
+# label_turno_b.grid(row=4, column=0, pady=2, padx=10, sticky="w")
+
+# label_turno_c = tk.Label(janela, text="Turno C", bg="#63201e", fg="white", font=("Arial", 11))
+# label_turno_c.grid(row=5, column=0, pady=2, padx=10, sticky="w")
+
+# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, font=("Arial", 12))
+# btn_mensagem.grid(row=6, column=1, padx=10, pady=20, sticky="e")
 
 # janela.mainloop()
 
@@ -62,22 +67,36 @@ from tkinter import messagebox
 
 
 # janela = tk.Tk()
-# janela.title("Peças")
-# janela.geometry("600x600")
+# janela.title("Calculadora de Peças")
+# janela.geometry("480x240")
 # janela.configure(bg="#ad1a15")
-    
-# lbl_mensagem = tk.Label(janela, text="Digite o número de peças produzidas em 1 hora: ")
-# lbl_mensagem.grid(row=0, column=0, pady=10, padx=10)
 
 
-# pecas_por_hora = tk.Entry(janela, font=("Arial", 12))
-# pecas_por_hora.grid(row=0, column=1, pady=10, padx=10)
+# janela.columnconfigure(0, weight=1)
+# janela.columnconfigure(1, weight=1)
 
+# container = tk.Frame(janela, bg="#ad1a15")
+# container.grid(row=0, column=0, padx=20, pady=20)
 
-# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo)
-# btn_mensagem.grid(row=6, column=1, padx=10, pady=10)
+# lbl_mensagem = tk.Label(
+#     container,
+#     text="Digite o número de peças produzidas em 1 hora:",
+#     font=("Arial", 12, "bold"),
+#     bg="#ad1a15",
+#     fg="white"
+# )
+# lbl_mensagem.grid(row=0, column=0, sticky="w", pady=(0, 10))
 
+# pecas_por_hora = tk.Entry(container, font=("Arial", 14), width=12, justify="center")
+# pecas_por_hora.grid(row=1, column=0, pady=(0, 15))
 
+# btn_mensagem = tk.Button(    container,   text="Calcular",    command=janela_bemvindo,    font=("Arial", 12, "bold"),    bg="#ffffff",    fg="#ad1a15",
+#     activebackground="#f0f0f0",
+#     relief="raised",
+#     bd=3,
+#     width=12
+# )
+# btn_mensagem.grid(row=2, column=0, pady=5)
 
 # janela.mainloop()
 
@@ -95,27 +114,26 @@ from tkinter import messagebox
 #         messagebox.showinfo("Bem-Vindo", f"A pressão em PSI é de: {pressao_psi} ")
 
 
+
 # janela = tk.Tk()
-# janela.title("Conversor de Bar em PSI")
-# janela.geometry("200x200")
-# janela.configure(bg="#dbd5d5")
-    
-# lbl_mensagem = tk.Label(janela, text="Digite a presão em Bar: ")
-# lbl_mensagem.grid(row=0, column=2, pady=10, padx=10)
+# janela.title("Conversor de Bar para PSI")
+# janela.geometry("320x220")
+# janela.configure(bg="#f2f0ee")
 
 
-# conversor_de_unidades = tk.Entry(janela, font=("Arial", 12))
-# conversor_de_unidades.grid(row=2, column=2, pady=10, padx=10)
+# janela = tk.Frame(janela, bg="#f2f0ee", padx=20, pady=20)
+# janela.pack(expand=True)
 
+# lbl_mensagem = tk.Label(janela, text="Digite a pressão em Bar:", bg="#f2f0ee", fg="#333", font=("Arial", 12, "bold"))
+# lbl_mensagem.pack(anchor="w", pady=(0, 10))
 
-# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, bg="#111110", font=("Arial", 11, "bold"),  fg="#FFF")
-# btn_mensagem.grid(row=3, column=2, padx=10, pady=10)
+# conversor_de_unidades = tk.Entry(janela, font=("Arial", 14), width=15, bd=2, relief="groove")
+# conversor_de_unidades.pack(pady=(0, 15))
 
-
+# btn_mensagem = tk.Button(janela, text="Calcular", command=janela_bemvindo, bg="#4b6584", fg="#ffffff", font=("Arial", 11, "bold"), activebackground="#3a4f6b", padx=10, pady=5)
+# btn_mensagem.pack()
 
 # janela.mainloop()
-
-
 
 # Média de Qualidade: Peça 3 notas de inspeção de uma peça (0 a 10). Exiba a média
 # aritmética simples delas.
@@ -128,43 +146,48 @@ from tkinter import messagebox
 #     if nota1 and nota2 and nota3 == "": 
 #         messagebox.showwarning("Aviso!", "Digite as notas de inspeção da peça: ")
 #     elif nota1 and nota2 and nota3 >= 0:
-#         qualidade = (nota1 + nota2 + nota3) /2
+#         qualidade = (nota1 + nota2 + nota3) /3
 #         messagebox.showinfo("Bem-Vindo", f"A média da qualidade da peça é de: {qualidade} ")
+
 
 
 # janela = tk.Tk()
 # janela.title("Média de Qualidade")
-# janela.geometry("400x400")
-# janela.configure(bg="#dbd5d5")
-    
-# lbl_mensagem = tk.Label(janela, text="Digite as notas de inspeção da peça: ")
-# lbl_mensagem.grid(row=0, column=1, pady=10, padx=10)
+# janela.geometry("420x340")
+# janela.configure(bg="#ece3d6")
 
-# lbl_mensagem = tk.Label(janela, text="Digite a primeira nota: ")
-# lbl_mensagem.grid(row=1, column=0, pady=10, padx=10)
+# container = tk.Frame(janela, bg="#f7f2ec", bd=2, relief="groove")
+# container.place(relx=0.5, rely=0.5, anchor="center", width=380, height=300)
 
-# lbl_mensagem = tk.Label(janela, text="Digite a segunda nota: ")
-# lbl_mensagem.grid(row=2, column=0, pady=10, padx=10)
+# titulo = tk.Label(container, text="Avaliação de Qualidade", bg="#f7f2ec", fg="#4b3b2d", font=("Helvetica", 16, "bold"))
+# titulo.pack(pady=(15, 10))
 
-# lbl_mensagem = tk.Label(janela, text="Digite a terceira nota: ")
-# lbl_mensagem.grid(row=3, column=0, pady=10, padx=10)
+# pergunta = tk.Label(container, text="Digite as notas de inspeção da peça:", bg="#f7f2ec", fg="#5f4a3f", font=("Arial", 11))
+# pergunta.pack(pady=(0, 15))
 
-# primeira = tk.Entry(janela, font=("Arial", 12))
-# primeira.grid(row=1, column=1, pady=10, padx=10)
+# janela = tk.Frame(container, bg="#f7f2ec")
+# janela.pack(pady=5)
 
-# segunda = tk.Entry(janela, font=("Arial", 12))
-# segunda.grid(row=2, column=1, pady=10, padx=10)
+# lbl_primeira = tk.Label(janela, text="Primeira nota:", bg="#f7f2ec", fg="#4b3b2d", font=("Arial", 10))
+# lbl_primeira.grid(row=0, column=0, sticky="e", padx=(0, 10), pady=5)
+# primeira = tk.Entry(janela, font=("Arial", 11), width=18)
+# primeira.grid(row=0, column=1, pady=5)
 
-# terceira = tk.Entry(janela, font=("Arial", 12))
-# terceira.grid(row=3, column=1, pady=10, padx=10)
+# lbl_segunda = tk.Label(janela, text="Segunda nota:", bg="#f7f2ec", fg="#4b3b2d", font=("Arial", 10))
+# lbl_segunda.grid(row=1, column=0, sticky="e", padx=(0, 10), pady=5)
+# segunda = tk.Entry(janela, font=("Arial", 11), width=18)
+# segunda.grid(row=1, column=1, pady=5)
 
+# lbl_terceira = tk.Label(janela, text="Terceira nota:", bg="#f7f2ec", fg="#4b3b2d", font=("Arial", 10))
+# lbl_terceira.grid(row=2, column=0, sticky="e", padx=(0, 10), pady=5)
+# terceira = tk.Entry(janela, font=("Arial", 11), width=18)
+# terceira.grid(row=2, column=1, pady=5)
 
-# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, bg="#111110", font=("Arial", 11, "bold"),  fg="#FFF")
-# btn_mensagem.grid(row=4, column=1, padx=10, pady=10)
-
-
+# btn_mensagem = tk.Button(container, text="Calcular", command=janela_bemvindo, bg="#795548", fg="#ffffff", font=("Arial", 11, "bold"), activebackground="#a67865", activeforeground="#ffffff", width=18)
+# btn_mensagem.pack(pady=15) 
 
 # janela.mainloop()
+
 
 # Termostato Inteligente: Peça a temperatura de um motor.
 # ● Abaixo de 40°C: "Baixa carga".
@@ -172,7 +195,7 @@ from tkinter import messagebox
 # ● Acima de 70°C: "ALERTA: Resfriamento Ativado!".
 
 # def janela_bemvindo():
-#     temperatura = int(temperatura_do_motor.get())
+#     temperatura = int(temperatura_motor.get())
 #     if temperatura == "": 
 #         messagebox.showwarning("Aviso!", "Digite a temperatura do motor em graus Celsius: ")
 #     elif temperatura < 40:
@@ -186,19 +209,21 @@ from tkinter import messagebox
 
 # janela = tk.Tk()
 # janela.title("Termostato Inteligente")
-# janela.geometry("400x400")
+# janela.geometry("420x330")
 # janela.configure(bg="#dbd5d5")
-    
-# lbl_mensagem = tk.Label(janela, text="Digite a temperatura do motor em graus Celsius: ")
-# lbl_mensagem.grid(row=0, column=1, pady=10, padx=10)
-
-# temperatura_do_motor = tk.Entry(janela, font=("Arial", 12))
-# temperatura_do_motor.grid(row=1, column=1, pady=10, padx=10)
-
-# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, bg="#111110", font=("Arial", 11, "bold"),  fg="#FFF")
-# btn_mensagem.grid(row=4, column=1, padx=10, pady=10)
 
 
+# janela = tk.Frame(janela, bg="#f2f0ee", padx=20, pady=20)
+# janela.pack(expand=True)
+
+# lbl_mensagem = tk.Label(janela, text="Digite a temperatura do motor em graus Celsius: ", bg="#f2f0ee", fg="#333", font=("Arial", 12, "bold"))
+# lbl_mensagem.pack(anchor="w", pady=(0, 10))
+
+# temperatura_motor = tk.Entry(janela, font=("Arial", 14), width=15, bd=2, relief="groove")
+# temperatura_motor.pack(pady=(0, 15))
+
+# btn_mensagem = tk.Button(janela, text="Calcular", command=janela_bemvindo, bg="#4b846e", fg="#ffffff", font=("Arial", 11, "bold"), activebackground="#3a6b42", padx=10, pady=5)
+# btn_mensagem.pack()
 
 # janela.mainloop()
 
@@ -207,7 +232,7 @@ from tkinter import messagebox
 
 
 # def janela_bemvindo():
-#     codigo = codigo_do_produto.get().upper()
+#     codigo = codigo_produto.get().upper()
 #     if codigo == "": 
 #         messagebox.showwarning("Aviso!", "Digite o código do produto! ")
 #     elif codigo == "A":
@@ -221,19 +246,20 @@ from tkinter import messagebox
 
 # janela = tk.Tk()
 # janela.title("Classificador de Lotes")
-# janela.geometry("400x400")
+# janela.geometry("350x330")
 # janela.configure(bg="#0e474b")
-    
-# lbl_mensagem = tk.Label(janela, text="Digite o código do produto: ")
-# lbl_mensagem.grid(row=0, column=1, pady=10, padx=10)
 
-# codigo_do_produto = tk.Entry(janela, font=("Arial", 12))
-# codigo_do_produto.grid(row=1, column=1, pady=10, padx=10)
+# janela = tk.Frame(janela, bg="#f2f0ee", padx=20, pady=20)
+# janela.pack(expand=True)
 
-# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, bg="#111110", font=("Arial", 11, "bold"),  fg="#FFF")
-# btn_mensagem.grid(row=4, column=1, padx=10, pady=10)
+# lbl_mensagem = tk.Label(janela, text="Digite o código do produto: ", bg="#f2f0ee", fg="#333", font=("Arial", 12, "bold"))
+# lbl_mensagem.pack(anchor="w", pady=(0, 10))
 
+# codigo_produto = tk.Entry(janela, font=("Arial", 14), width=15, bd=2, relief="groove")
+# codigo_produto.pack(pady=(0, 15))
 
+# btn_mensagem = tk.Button(janela, text="Enter", command=janela_bemvindo, bg="#4b846e", fg="#ffffff", font=("Arial", 11, "bold"), activebackground="#3a6b42", padx=10, pady=5)
+# btn_mensagem.pack()
 
 # janela.mainloop()
 
@@ -255,7 +281,7 @@ from tkinter import messagebox
 
 # janela = tk.Tk()
 # janela.title("Segurança de operação")
-# janela.geometry("300x200")
+# janela.geometry("300x220")
 # janela.configure(bg="#0e474b")
     
 # lbl_mensagem = tk.Label(janela, text="A porta está fechada ou aberta? ")
@@ -295,6 +321,9 @@ from tkinter import messagebox
 # janela.title("Cálculo de Descarte")
 # janela.geometry("250x250")
 # janela.configure(bg="#6978bb")
+
+# janela = tk.Frame(janela, bg="#563788", padx=20, pady=20)
+# janela.pack(expand=True)
     
 # lbl_mensagem = tk.Label(janela, text="Digite o total de peças produzidas: ")
 # lbl_mensagem.grid(row=0, column=1, pady=10, padx=10)
@@ -379,5 +408,4 @@ from tkinter import messagebox
 
 
 # janela.mainloop()
-
 
