@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MJ vs Prince - The Ultimate Showdown</title>
+    <style>
+        body {
+            margin: 0;
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        h1 {
+            margin: 5px 0;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(90deg, #00bcd4, #8a2be2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+        }
+        #ui {
+            width: 800px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        .health-bar-container {
+            width: 300px;
+            background: #222;
+            border: 2px solid #444;
+            height: 24px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        .health-bar {
+            height: 100%;
+            width: 100%;
+            transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #mj-health { background: linear-gradient(90deg, #008ba3, #00bcd4); float: left; }
+        #prince-health { background: linear-gradient(90deg, #8a2be2, #4b0082); float: right; }
+        .name { font-weight: bold; margin-bottom: 4px; font-size: 18px; text-shadow: 1px 1px 2px #000; }
+        canvas {
+            background: #000;
+            border: 4px solid #333;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.2);
+            image-rendering: pixelated;
+        }
+        #controls {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: #888;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .kbc {
+            background: #333;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #ddd;
+            border-bottom: 2px solid #111;
+        }
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border: 2px solid #8a2be2;
+            text-align: center;
+            display: none;
+            z-index: 10;
+        }
+        #game-over h2 { font-size: 32px; margin-bottom: 10px; }
+        #game-over button {
+            background: #8a2be2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        #game-over button:hover { background: #9b4deb; }
+    </style>
+</head>
+<body>
+
+    <h1>The King vs The Purple One</h1>
+
+    <div id="ui">
+        <div>
+            <div class="name" style="color: #00bcd4;">MJ <span style="font-size: 12px; opacity: 0.7;">(VOCÊ)</span></div>
+            <div class="health-bar-container">
+                <div id="mj-health" class="health-bar"></div>
+            </div>
+        </div>
+        <div style="text-align: right;">
+            <div class="name" style="color: #8a2be2;">PRINCE <span style="font-size: 12px; opacity: 0.7;">(MÁQUINA)</span></div>
+            <div class="health-bar-container">
+                <div id="prince-health" class="health-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div style="position: relative;">
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div id="game-over">
+            <h2 id="winner-text"></h2>
+            <p>O show acabou!</p>
+            <button onclick="location.reload()">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <div id="controls">
+        <div><span class="kbc">A</span> <span class="kbc">D</span> Mover | <span class="kbc">W</span> Pular | <span class="kbc">F</span> Soco | <span class="kbc">G</span> Chute</div>
+        <div style="margin-top: 5px; font-style: italic;">"Prince está sendo controlado por uma IA avançada!"</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const winnerDisplay = document.getElementById('game-over');
+        const winnerText = document.getElementById('winner-text');
+
+        const gravity = 0.7;
+        const groundY = canvas.height - 40;
+
+        class Fighter {
+            constructor({ position, color, name, isAI }) {
+                this.position = position;
+                this.velocity = { x: 0, y: 0 };
+                this.width = 50;
+                this.height = 130;
+                this.color = color;
+                this.name = name;
+                this.isAI = isAI;
+                this.health = 100;
+                this.isAttacking = false;
+                this.attackType = 'punch'; // 'punch' or 'kick'
+                this.isJumping = false;
+                this.facing = name === 'MJ' ? 'right' : 'left';
+                this.frame = 0;
+                this.isHit = false;
+                this.hitStun = 0;
+                
+                // Attack boxes
+                this.attackBox = {
+                    position: { x: this.position.x, y: this.position.y },
+                    width: 80,
+                    height: 50
+                };
+            }
+
+            draw() {
+                ctx.save();
+                
+                // Sombras
+                ctx.fillStyle = 'rgba(0,0,0,0.3)';
+                ctx.beginPath();
+                ctx.ellipse(this.position.x + this.width/2, groundY + 5, 30, 10, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Efeito de dano
+                if (this.isHit && Math.floor(Date.now() / 100) % 2 === 0) {
+                    ctx.globalAlpha = 0.5;
+                }
+
+                // Corpo (Simplificado estilo pixel art)
+                ctx.fillStyle = this.color;
+                
+                // Tronco
+                ctx.fillRect(this.position.x, this.position.y + 30, this.width, 60);
+                
+                // Pernas
+                const legOffset = Math.sin(this.frame * 0.2) * 5;
+                ctx.fillRect(this.position.x + 5, this.position.y + 90, 15, 40);
+                ctx.fillRect(this.position.x + 30, this.position.y + 90, 15, 40);
+
+                // Cabeça
+                ctx.fillStyle = '#ffdbac'; // Cor de pele genérica
+                ctx.fillRect(this.position.x + 10, this.position.y, 30, 30);
+
+                // Detalhes Específicos
+                if (this.name === 'MJ') {
+                    // Chapéu
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(this.position.x - 5, this.position.y - 5, 60, 10);
+                    ctx.fillRect(this.position.x + 5, this.position.y - 15, 40, 15);
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(this.position.x + 5, this.position.y - 5, 40, 3);
+                    
+                    // Cabelo MJ
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(this.position.x + 35, this.position.y + 5, 10, 25);
+                    
+                    // Braçadeira
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(this.position.x, this.position.y + 50, 10, 8);
+                } else {
+                    // Cabelo Prince
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(this.position.x + 5, this.position.y - 10, 40, 15);
+                    ctx.fillRect(this.position.x - 5, this.position.y + 5, 10, 30);
+                    
+                    // Detalhe camisa Prince (Babados)
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(this.position.x + 20, this.position.y + 35, 10, 20);
+                }
+
+                // Animação de Ataque
+                if (this.isAttacking) {
+                    ctx.fillStyle = '#ffdbac';
+                    const attackX = this.facing === 'right' ? this.position.x + this.width : this.position.x - 30;
+                    if (this.attackType === 'punch') {
+                        ctx.fillRect(attackX, this.position.y + 40, 30, 15);
+                    } else {
+                        ctx.fillRect(attackX, this.position.y + 80, 40, 20);
+                    }
+                }
+
+                ctx.restore();
+            }
+
+            update() {
+                this.draw();
+                this.frame++;
+
+                if (this.hitStun > 0) {
+                    this.hitStun--;
+                    if (this.hitStun === 0) this.isHit = false;
+                }
+
+                // Update attack box position
+                this.attackBox.position.x = this.facing === 'right' ? this.position.x + this.width : this.position.x - this.attackBox.width;
+                this.attackBox.position.y = this.position.y + 40;
+
+                // Physics
+                this.position.x += this.velocity.x;
+                this.position.y += this.velocity.y;
+
+                if (this.position.y + this.height + this.velocity.y >= groundY) {
+                    this.velocity.y = 0;
+                    this.position.y = groundY - this.height;
+                    this.isJumping = false;
+                } else {
+                    this.velocity.y += gravity;
+                }
+
+                // Screen boundaries
+                if (this.position.x < 0) this.position.x = 0;
+                if (this.position.x + this.width > canvas.width) this.position.x = canvas.width - this.width;
+            }
+
+            attack(type) {
+                if (this.isAttacking || this.hitStun > 0) return;
+                this.attackType = type;
+                this.isAttacking = true;
+                setTimeout(() => {
+                    this.isAttacking = false;
+                }, 200);
+            }
+
+            takeDamage(amount) {
+                this.health -= amount;
+                this.isHit = true;
+                this.hitStun = 20;
+                if (this.health < 0) this.health = 0;
+                
+                const barId = this.name === 'MJ' ? 'mj-health' : 'prince-health';
+                document.getElementById(barId).style.width = this.health + '%';
+            }
+        }
+
+        // Setup Characters
+        const mj = new Fighter({
+            position: { x: 100, y: 0 },
+            color: '#eeeeee',
+            name: 'MJ',
+            isAI: false
+        });
+
+        const prince = new Fighter({
+            position: { x: 650, y: 0 },
+            color: '#8a2be2',
+            name: 'Prince',
+            isAI: true
+        });
+
+        // Keyboard State
+        const keys = {
+            a: { pressed: false },
+            d: { pressed: false }
+        };
+
+        // AI Logic for Prince
+        function updateAI() {
+            if (prince.health <= 0 || mj.health <= 0 || prince.hitStun > 0) return;
+
+            const distance = mj.position.x - prince.position.x;
+            const absDist = Math.abs(distance);
+
+            // Facing MJ
+            prince.facing = distance > 0 ? 'right' : 'left';
+
+            // Movement Logic
+            if (absDist > 100) {
+                prince.velocity.x = distance > 0 ? 3 : -3;
+            } else if (absDist < 60) {
+                prince.velocity.x = distance > 0 ? -2 : 2; // Recuar se muito perto
+            } else {
+                prince.velocity.x = 0;
+            }
+
+            // Attack Logic
+            if (absDist < 120 && Math.random() < 0.05) {
+                const attackType = Math.random() > 0.5 ? 'punch' : 'kick';
+                prince.attack(attackType);
+            }
+
+            // Jump Logic
+            if (mj.velocity.y < 0 && Math.random() < 0.02 && !prince.isJumping) {
+                prince.velocity.y = -15;
+                prince.isJumping = true;
+            }
+        }
+
+        function checkCollision(f1, f2) {
+            return (
+                f1.isAttacking &&
+                f1.attackBox.position.x < f2.position.x + f2.width &&
+                f1.attackBox.position.x + f1.attackBox.width > f2.position.x &&
+                f1.attackBox.position.y < f2.position.y + f2.height &&
+                f1.attackBox.position.y + f1.attackBox.height > f2.position.y
+            );
+        }
+
+        function drawBackground() {
+            // Stage
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#1a1a2e');
+            gradient.addColorStop(0.8, '#16213e');
+            gradient.addColorStop(1, '#0f3460');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Floor
+            ctx.fillStyle = '#050505';
+            ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+            
+            // Grid effect on floor
+            ctx.strokeStyle = '#1e1e1e';
+            ctx.lineWidth = 1;
+            for(let i = 0; i < canvas.width; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(i, groundY);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+
+            // Lights
+            ctx.fillStyle = 'rgba(138, 43, 226, 0.1)';
+            ctx.beginPath();
+            ctx.moveTo(200, 0);
+            ctx.lineTo(100, groundY);
+            ctx.lineTo(300, groundY);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(0, 188, 212, 0.1)';
+            ctx.beginPath();
+            ctx.moveTo(600, 0);
+            ctx.lineTo(500, groundY);
+            ctx.lineTo(700, groundY);
+            ctx.fill();
+        }
+
+        let gameOver = false;
+
+        function animate() {
+            if (gameOver) return;
+            window.requestAnimationFrame(animate);
+            
+            drawBackground();
+
+            // Player Movement
+            mj.velocity.x = 0;
+            if (keys.a.pressed) {
+                mj.velocity.x = -5;
+                mj.facing = 'left';
+            } else if (keys.d.pressed) {
+                mj.velocity.x = 5;
+                mj.facing = 'right';
+            }
+
+            // AI Update
+            updateAI();
+
+            // Update Fighters
+            mj.update();
+            prince.update();
+
+            // Collision Detection
+            if (checkCollision(mj, prince)) {
+                mj.isAttacking = false;
+                prince.takeDamage(mj.attackType === 'kick' ? 10 : 7);
+                // Particle effect or shake could be here
+            }
+
+            if (checkCollision(prince, mj)) {
+                prince.isAttacking = false;
+                mj.takeDamage(prince.attackType === 'kick' ? 10 : 7);
+            }
+
+            // End Game Check
+            if (mj.health <= 0 || prince.health <= 0) {
+                gameOver = true;
+                winnerDisplay.style.display = 'block';
+                winnerText.innerText = mj.health > 0 ? "MICHAEL JACKSON VENCEU!" : "PRINCE VENCEU!";
+                winnerText.style.color = mj.health > 0 ? "#00bcd4" : "#8a2be2";
+            }
+        }
+
+        // Input Listeners
+        window.addEventListener('keydown', (e) => {
+            if (gameOver) return;
+            switch (e.key.toLowerCase()) {
+                case 'a': keys.a.pressed = true; break;
+                case 'd': keys.d.pressed = true; break;
+                case 'w': 
+                    if (!mj.isJumping) {
+                        mj.velocity.y = -18;
+                        mj.isJumping = true;
+                    }
+                    break;
+                case 'f': mj.attack('punch'); break;
+                case 'g': mj.attack('kick'); break;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            switch (e.key.toLowerCase()) {
+                case 'a': keys.a.pressed = false; break;
+                case 'd': keys.d.pressed = false; break;
+            }
+        });
+
+        // Start the show
+        animate();
+    </script>
+</body>
+</html>

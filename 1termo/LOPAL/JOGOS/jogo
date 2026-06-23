@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+import tkinter as tk
+
+class JogoGotico:
+    def __init__(self, root):
+        root.title('MANSÃO GÓTICA')
+        self.text = tk.Text(root, wrap='word', width=60, height=18, state='disabled')
+        self.text.pack(padx=10, pady=10)
+
+        self.button_frame = tk.Frame(root)
+        self.button_frame.pack(padx=10, pady=(0, 10))
+
+        self.buttons = []
+        for _ in range(3):
+            button = tk.Button(self.button_frame, width=25)
+            button.pack(side='left', padx=5)
+            self.buttons.append(button)
+
+        self.mensagem('=== MANSÃO GÓTICA ===')
+        self.inicio()
+
+    def mensagem(self, texto):
+        self.text.config(state='normal')
+        self.text.insert('end', texto + '\n')
+        self.text.see('end')
+        self.text.config(state='disabled')
+
+    def set_opcoes(self, opcoes):
+        for index, (rotulo, comando) in enumerate(opcoes):
+            self.buttons[index].config(text=rotulo, command=comando, state='normal')
+            self.buttons[index].pack(side='left', padx=5)
+        for index in range(len(opcoes), len(self.buttons)):
+            self.buttons[index].pack_forget()
+
+    def inicio(self):
+        self.mensagem('Você desperta em uma mansão antiga sob o luar, o vento uiva nas janelas quebradas.')
+        self.mensagem('A sala está envolta em sombras e há três portas: uma à esquerda, outra à direita e uma porta pesada ao fundo.')
+        self.mensagem('O que você faz?')
+        self.set_opcoes([
+            ('Investigar a porta à esquerda', self.sala_esquerda),
+            ('Ir para a porta da direita', self.sala_direita),
+            ('Abrir a porta pesada ao fundo', self.botao_porta),
+        ])
+
+
+def sala_esquerda():
+    escrever('Você entra na sala à esquerda. Velas derretem, revelando pinturas antigas.', 0.04)
+    escrever('Um sussurro no corredor diz: "Saia enquanto pode."', 0.04)
+    escrever('O que você faz?')
+    escrever('1) Seguir o sussurro')
+    escrever('2) Voltar para a sala principal')
+    escolha = escolher({'1', '2'})
+    if escolha == '1':
+        escrever('Você segue o sussurro e encontra uma passagem secreta para o subsolo.')
+        return subterraneo()
+    return inicio()
+
+
+def sala_direita():
+    escrever('A porta da direita range. Dentro, há um espelho antigo na parede e uma cadeira vazia.', 0.04)
+    escrever('O espelho reflete mais do que seu rosto; há algo atrás de você.', 0.04)
+    escrever('O que você faz?')
+    escrever('1) Olhar no espelho')
+    escrever('2) Sair da sala')
+    escolha = escolher({'1', '2'})
+    if escolha == '1':
+        escrever('No reflexo, uma sombra se aproxima lentamente. Você sente um frio na espinha.', 0.04)
+        escrever('Você decide recuar para a sala principal.', 0.04)
+    return inicio()
+
+
+def botao_porta():
+    escrever('A porta pesada cede com um suspiro antigo. Há uma alavanca estranha ao lado.', 0.04)
+    escrever('O que você faz?')
+    escrever('1) Puxar a alavanca')
+    escrever('2) Entrar com cuidado')
+    escolha = escolher({'1', '2'})
+    if escolha == '1':
+        escrever('A alavanca aciona um mecanismo oculto e revela um corredor iluminado por lanternas negras.', 0.04)
+        return corredor_final()
+    escrever('Você entra cuidadosamente e o chão range. Nada acontece, mas a sensação de ser observado aumenta.', 0.04)
+    return inicio()
+
+
+def subterraneo():
+    escrever('Você desce para o subsolo. Há uma tumba antiga com uma inscrição incompreensível.', 0.04)
+    escrever('Ao tocar a pedra, uma voz ancestral pergunta: "Por que você desperta os esquecidos?"', 0.04)
+    escrever('O que você responde?')
+    escrever('1) "Procuro a verdade."')
+    escrever('2) "Volto para o mundo dos vivos."')
+    escolha = escolher({'1', '2'})
+    if escolha == '1':
+        escrever('A tumba se abre e revela um segredo sombrio: você sempre fez parte desta casa.', 0.04)
+        escrever('Você aceita seu destino. Fim.', 0.04)
+    else:
+        escrever('Você recua e corre de volta para a luz, deixando o passado enterrado.', 0.04)
+        escrever('Fugir é uma vitória. Fim.', 0.04)
+    return None
+
+
+def corredor_final():
+    escrever('O corredor leva a uma câmara com um sarcófago de pedra no centro.', 0.04)
+    escrever('Uma figura encapuzada está ao lado e estende a mão.', 0.04)
+    escrever('O que você faz?')
+    escrever('1) Aceitar a mão')
+    escrever('2) Recuar e voltar para a mansão')
+    escolha = escolher({'1', '2'})
+    if escolha == '1':
+        escrever('A figura sorri e você é envolvido por uma névoa gótica. Sua jornada termina como guardião da mansão.', 0.04)
+        escrever('Fim.', 0.04)
+    else:
+        escrever('Você recua e o corredor se fecha atrás de você, selando o destino da mansão.', 0.04)
+        escrever('Você escapou, mas jamais esquecerá o que viu. Fim.', 0.04)
+    return None
+
+
+def main():
+    escrever('=== MANSÃO GÓTICA ===\n', 0.02)
+    proximo = inicio()
+    while proximo:
+        if proximo == '1':
+            proximo = sala_esquerda()
+        elif proximo == '2':
+            proximo = sala_direita()
+        elif proximo == '3':
+            proximo = botao_porta()
+    escrever('\nObrigado por jogar.')
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        escrever('\nJogo interrompido.')

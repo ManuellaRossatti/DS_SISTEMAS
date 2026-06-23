@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MJ vs Prince - The Ultimate Showdown</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: radial-gradient(circle at 50% 0%, #1a0a2e 0%, #0a0a0a 70%);
+        color: #fff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        overflow: hidden;
+        user-select: none;
+    }
+    h1 {
+        margin: 5px 0;
+        font-size: 28px;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        background: linear-gradient(90deg, #00bcd4, #8a2be2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
+    }
+    #round-info {
+        font-size: 14px;
+        color: #aaa;
+        margin-bottom: 8px;
+        letter-spacing: 2px;
+    }
+    #ui {
+        width: 800px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        position: relative;
+    }
+    .side { width: 320px; }
+    .side.right { text-align: right; }
+    .health-bar-container {
+        width: 300px;
+        background: #222;
+        border: 2px solid #444;
+        height: 22px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+    }
+    .health-bar {
+        height: 100%;
+        width: 100%;
+        transition: width 0.25s ease-out;
+    }
+    #mj-health { background: linear-gradient(90deg, #008ba3, #00bcd4); float: left; }
+    #prince-health { background: linear-gradient(90deg, #8a2be2, #4b0082); float: right; }
+    .super-bar-container {
+        width: 300px;
+        background: #111;
+        border: 1px solid #333;
+        height: 8px;
+        margin-top: 4px;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    .super-bar {
+        height: 100%;
+        width: 0%;
+        transition: width 0.2s ease-out;
+        background: linear-gradient(90deg, #ffd700, #ff8c00);
+    }
+    .name { font-weight: bold; margin-bottom: 4px; font-size: 18px; text-shadow: 1px 1px 2px #000; }
+    .wins { font-size: 13px; color: #ffd700; letter-spacing: 3px; }
+    #timer {
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 26px;
+        font-weight: bold;
+        background: #000;
+        border: 2px solid #444;
+        border-radius: 6px;
+        padding: 2px 12px;
+        color: #fff;
+    }
+    canvas {
+        background: #000;
+        border: 4px solid #333;
+        box-shadow: 0 0 30px rgba(138, 43, 226, 0.25);
+        image-rendering: pixelated;
+    }
+    #controls {
+        margin-top: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        font-size: 13px;
+        color: #999;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 8px 14px;
+        border-radius: 5px;
+    }
+    .kbc {
+        background: #333;
+        padding: 2px 6px;
+        border-radius: 3px;
+        color: #ddd;
+        border-bottom: 2px solid #111;
+    }
+    #game-over {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.92);
+        padding: 40px;
+        border: 2px solid #8a2be2;
+        text-align: center;
+        display: none;
+        z-index: 10;
+        border-radius: 8px;
+    }
+    #game-over h2 { font-size: 30px; margin-bottom: 6px; }
+    #game-over button {
+        background: #8a2be2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        margin-top: 12px;
+    }
+    #game-over button:hover { background: #9b4deb; }
+    #pause-hint { font-size: 11px; color: #555; margin-top: 4px; }
+    .round-banner {
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.5);
+        font-size: 48px;
+        font-weight: 900;
+        letter-spacing: 6px;
+        color: #fff;
+        text-shadow: 0 0 20px #8a2be2, 0 0 40px #00bcd4;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 5;
+        transition: all 0.3s ease-out;
+    }
+    .round-banner.show {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+</style>
+</head>
+<body>
+
+<h1>The King vs The Purple One</h1>
+<div id="round-info">ROUND <span id="round-num">1</span> DE 3</div>
+
+<div id="ui">
+    <div class="side">
+        <div class="name" style="color: #00bcd4;">MJ <span style="font-size: 12px; opacity: 0.7;">(VOCÊ)</span></div>
+        <div class="wins" id="mj-wins"></div>
+        <div class="health-bar-container"><div id="mj-health" class="health-bar"></div></div>
+        <div class="super-bar-container"><div id="mj-super" class="super-bar"></div></div>
+    </div>
+    <div id="timer">60</div>
+    <div class="side right">
+        <div class="name" style="color: #8a2be2;">PRINCE <span style="font-size: 12px; opacity: 0.7;">(MÁQUINA)</span></div>
+        <div class="wins" id="prince-wins"></div>
+        <div class="health-bar-container"><div id="prince-health" class="health-bar"></div></div>
+        <div class="super-bar-container"><div id="prince-super" class="super-bar"></div></div>
+    </div>
+</div>
+
+<div style="position: relative;">
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <div class="round-banner" id="round-banner"></div>
+    <div id="game-over">
+        <h2 id="winner-text"></h2>
+        <p id="match-text">O show acabou!</p>
+        <button onclick="location.reload()">Jogar Novamente</button>
+    </div>
+</div>
+
+<div id="controls">
+    <div><span class="kbc">A</span> <span class="kbc">D</span> Mover | <span class="kbc">W</span> Pular | <span class="kbc">F</span> Soco | <span class="kbc">G</span> Chute | <span class="kbc">S</span> Defender | <span class="kbc">H</span> Especial</div>
+    <div id="pause-hint"><span class="kbc">P</span> Pausar — "Prince está sendo controlado por uma IA adaptativa!"</div>
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const winnerDisplay = document.getElementById('game-over');
+const winnerText = document.getElementById('winner-text');
+const matchText = document.getElementById('match-text');
+const timerEl = document.getElementById('timer');
+const roundBanner = document.getElementById('round-banner');
+const roundNumEl = document.getElementById('round-num');
+
+const gravity = 0.7;
+const groundY = canvas.height - 40;
+const WINS_NEEDED = 2;
+
+let mjWins = 0, princeWins = 0, round = 1;
+let particles = [];
+let screenShake = 0;
+let hitStopFrames = 0;
+let paused = false;
+let roundTime = 60;
+let roundTimerInterval = null;
+let roundActive = false;
+
+// ---------- Audio (simple synthesized beeps, no external files) ----------
+let audioCtx = null;
+function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+}
+function playTone(freq, duration, type = 'square', volume = 0.07) {
+    try {
+        const ac = getAudioCtx();
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.value = volume;
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + duration);
+        osc.stop(ac.currentTime + duration);
+    } catch (e) { /* ignore audio errors */ }
+}
+function sfxPunch() { playTone(140, 0.08, 'square', 0.08); }
+function sfxKick() { playTone(90, 0.12, 'square', 0.09); }
+function sfxBlock() { playTone(300, 0.05, 'triangle', 0.05); }
+function sfxJump() { playTone(440, 0.08, 'sine', 0.04); }
+function sfxSpecial() { playTone(220, 0.3, 'sawtooth', 0.1); }
+function sfxRoundWin() { playTone(523, 0.15, 'sine', 0.08); setTimeout(() => playTone(659, 0.2, 'sine', 0.08), 150); }
+
+// ---------- Particles ----------
+function spawnHitParticles(x, y, color, count = 10) {
+    for (let i = 0; i < count; i++) {
+        particles.push({
+            x, y,
+            vx: (Math.random() - 0.5) * 8,
+            vy: (Math.random() - 0.5) * 8 - 2,
+            life: 20 + Math.random() * 10,
+            maxLife: 30,
+            color,
+            size: 2 + Math.random() * 3
+        });
+    }
+}
+function updateParticles() {
+    particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.3;
+        p.life--;
+    });
+    particles = particles.filter(p => p.life > 0);
+}
+function drawParticles() {
+    particles.forEach(p => {
+        ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+    });
+    ctx.globalAlpha = 1;
+}
+
+class Fighter {
+    constructor({ position, color, name, isAI }) {
+        this.position = position;
+        this.velocity = { x: 0, y: 0 };
+        this.width = 50;
+        this.height = 130;
+        this.color = color;
+        this.name = name;
+        this.isAI = isAI;
+        this.health = 100;
+        this.maxHealth = 100;
+        this.super = 0;
+        this.maxSuper = 100;
+        this.isAttacking = false;
+        this.attackType = 'punch';
+        this.attackHasLanded = false;
+        this.isJumping = false;
+        this.isBlocking = false;
+        this.facing = name === 'MJ' ? 'right' : 'left';
+        this.frame = 0;
+        this.isHit = false;
+        this.hitStun = 0;
+        this.attackCooldown = 0;
+        this.comboCount = 0;
+        this.comboTimer = 0;
+
+        this.attackBox = {
+            position: { x: this.position.x, y: this.position.y },
+            width: 80,
+            height: 50
+        };
+    }
+
+    draw() {
+        ctx.save();
+
+        // Sombra
+        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+        ctx.beginPath();
+        ctx.ellipse(this.position.x + this.width / 2, groundY + 5, 30, 10, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (this.isHit && Math.floor(Date.now() / 80) % 2 === 0) {
+            ctx.globalAlpha = 0.45;
+        }
+
+        // Aura de bloqueio
+        if (this.isBlocking) {
+            ctx.strokeStyle = 'rgba(0, 220, 255, 0.6)';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(this.position.x - 5, this.position.y - 5, this.width + 10, this.height + 10);
+        }
+
+        // Aura de super pronto
+        if (this.super >= this.maxSuper) {
+            const glow = 0.3 + 0.2 * Math.sin(this.frame * 0.2);
+            ctx.shadowColor = '#ffd700';
+            ctx.shadowBlur = 15;
+            ctx.globalAlpha = glow + 0.6;
+        }
+
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.position.x, this.position.y + 30, this.width, 60);
+
+        const legBend = this.isJumping ? 5 : Math.sin(this.frame * 0.2) * 4;
+        ctx.fillRect(this.position.x + 5, this.position.y + 90, 15, 40 - Math.abs(legBend));
+        ctx.fillRect(this.position.x + 30, this.position.y + 90, 15, 40 - Math.abs(legBend));
+
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = '#ffdbac';
+        ctx.fillRect(this.position.x + 10, this.position.y, 30, 30);
+
+        if (this.name === 'MJ') {
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(this.position.x - 5, this.position.y - 5, 60, 10);
+            ctx.fillRect(this.position.x + 5, this.position.y - 15, 40, 15);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(this.position.x + 5, this.position.y - 5, 40, 3);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(this.position.x + 35, this.position.y + 5, 10, 25);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(this.position.x, this.position.y + 50, 10, 8);
+        } else {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(this.position.x + 5, this.position.y - 10, 40, 15);
+            ctx.fillRect(this.position.x - 5, this.position.y + 5, 10, 30);
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(this.position.x + 20, this.position.y + 35, 10, 20);
+        }
+
+        if (this.isAttacking) {
+            ctx.fillStyle = '#ffdbac';
+            const attackX = this.facing === 'right' ? this.position.x + this.width : this.position.x - 30;
+            if (this.attackType === 'special') {
+                ctx.fillStyle = '#ffd700';
+                ctx.fillRect(attackX - 10, this.position.y + 30, 50, 30);
+            } else if (this.attackType === 'punch') {
+                ctx.fillRect(attackX, this.position.y + 40, 30, 15);
+            } else {
+                ctx.fillRect(attackX, this.position.y + 80, 40, 20);
+            }
+        }
+
+        ctx.restore();
+    }
+
+    update() {
+        this.draw();
+        this.frame++;
+
+        if (this.attackCooldown > 0) this.attackCooldown--;
+        if (this.comboTimer > 0) {
+            this.comboTimer--;
+            if (this.comboTimer === 0) this.comboCount = 0;
+        }
+
+        if (this.hitStun > 0) {
+            this.hitStun--;
+            if (this.hitStun === 0) this.isHit = false;
+        }
+
+        this.attackBox.position.x = this.facing === 'right' ? this.position.x + this.width : this.position.x - this.attackBox.width;
+        this.attackBox.position.y = this.position.y + 40;
+
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+
+        if (this.position.y + this.height + this.velocity.y >= groundY) {
+            this.velocity.y = 0;
+            this.position.y = groundY - this.height;
+            this.isJumping = false;
+        } else {
+            this.velocity.y += gravity;
+        }
+
+        if (this.position.x < 0) this.position.x = 0;
+        if (this.position.x + this.width > canvas.width) this.position.x = canvas.width - this.width;
+    }
+
+    attack(type) {
+        if (this.isAttacking || this.hitStun > 0 || this.isBlocking || this.attackCooldown > 0) return;
+        if (type === 'special') {
+            if (this.super < this.maxSuper) return;
+            this.super = 0;
+            updateSuperBar(this);
+            sfxSpecial();
+        } else if (type === 'punch') {
+            sfxPunch();
+        } else {
+            sfxKick();
+        }
+        this.attackType = type;
+        this.isAttacking = true;
+        this.attackHasLanded = false;
+        const duration = type === 'special' ? 350 : (type === 'kick' ? 260 : 180);
+        this.attackCooldown = type === 'special' ? 60 : (type === 'kick' ? 28 : 16);
+        setTimeout(() => { this.isAttacking = false; }, duration);
+    }
+
+    takeDamage(amount, opponent) {
+        if (this.isBlocking) {
+            amount = Math.max(1, Math.floor(amount * 0.2));
+            sfxBlock();
+            spawnHitParticles(this.position.x + this.width / 2, this.position.y + 60, '#00d4ff', 6);
+        } else {
+            spawnHitParticles(this.position.x + this.width / 2, this.position.y + 60, '#ff3030', 12);
+            screenShake = 6;
+            hitStopFrames = 4;
+        }
+        this.health -= amount;
+        this.isHit = true;
+        this.hitStun = this.isBlocking ? 8 : 20;
+        if (this.health < 0) this.health = 0;
+
+        if (opponent && !this.isBlocking) {
+            opponent.super = Math.min(opponent.maxSuper, opponent.super + amount * 1.5);
+            updateSuperBar(opponent);
+            opponent.comboCount++;
+            opponent.comboTimer = 45;
+        }
+
+        const barId = this.name === 'MJ' ? 'mj-health' : 'prince-health';
+        document.getElementById(barId).style.width = this.health + '%';
+    }
+}
+
+function updateSuperBar(fighter) {
+    const id = fighter.name === 'MJ' ? 'mj-super' : 'prince-super';
+    document.getElementById(id).style.width = fighter.super + '%';
+}
+
+function makeFighters() {
+    const mj = new Fighter({ position: { x: 100, y: 0 }, color: '#eeeeee', name: 'MJ', isAI: false });
+    const prince = new Fighter({ position: { x: 650, y: 0 }, color: '#8a2be2', name: 'Prince', isAI: true });
+    return { mj, prince };
+}
+
+let { mj, prince } = makeFighters();
+
+const keys = { a: { pressed: false }, d: { pressed: false } };
+
+// ---------- AI ----------
+let aiState = { lastAction: 0, aggression: 0.05, jumpCooldown: 0 };
+
+function updateAI() {
+    if (prince.health <= 0 || mj.health <= 0 || prince.hitStun > 0 || !roundActive) return;
+
+    const distance = mj.position.x - prince.position.x;
+    const absDist = Math.abs(distance);
+
+    prince.facing = distance > 0 ? 'right' : 'left';
+
+    // Block reactively when MJ attacks nearby
+    if (mj.isAttacking && absDist < 110 && Math.random() < 0.5) {
+        prince.isBlocking = true;
+    } else if (Math.random() < 0.08) {
+        prince.isBlocking = false;
+    }
+
+    if (prince.isBlocking) {
+        prince.velocity.x = 0;
+    } else if (absDist > 110) {
+        prince.velocity.x = distance > 0 ? 3.2 : -3.2;
+    } else if (absDist < 55) {
+        prince.velocity.x = distance > 0 ? -2 : 2;
+    } else {
+        prince.velocity.x = 0;
+    }
+
+    // Use special when charged and in range
+    if (prince.super >= prince.maxSuper && absDist < 140 && Math.random() < 0.04) {
+        prince.attack('special');
+    } else if (!prince.isBlocking && absDist < 120 && Math.random() < aiState.aggression) {
+        const attackType = Math.random() > 0.5 ? 'punch' : 'kick';
+        prince.attack(attackType);
+    }
+
+    if (mj.velocity.y < 0 && absDist < 130 && aiState.jumpCooldown <= 0 && Math.random() < 0.02 && !prince.isJumping) {
+        prince.velocity.y = -15;
+        prince.isJumping = true;
+        sfxJump();
+        aiState.jumpCooldown = 60;
+    }
+    if (aiState.jumpCooldown > 0) aiState.jumpCooldown--;
+}
+
+function checkCollision(f1, f2) {
+    return (
+        f1.isAttacking &&
+        !f1.attackHasLanded &&
+        f1.attackBox.position.x < f2.position.x + f2.width &&
+        f1.attackBox.position.x + f1.attackBox.width > f2.position.x &&
+        f1.attackBox.position.y < f2.position.y + f2.height &&
+        f1.attackBox.position.y + f1.attackBox.height > f2.position.y
+    );
+}
+
+function drawBackground() {
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, '#1a1a2e');
+    gradient.addColorStop(0.8, '#16213e');
+    gradient.addColorStop(1, '#0f3460');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#050505';
+    ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+
+    ctx.strokeStyle = '#1e1e1e';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < canvas.width; i += 40) {
+        ctx.beginPath();
+        ctx.moveTo(i, groundY);
+        ctx.lineTo(i, canvas.height);
+        ctx.stroke();
+    }
+
+    ctx.fillStyle = 'rgba(138, 43, 226, 0.1)';
+    ctx.beginPath();
+    ctx.moveTo(200, 0);
+    ctx.lineTo(100, groundY);
+    ctx.lineTo(300, groundY);
+    ctx.fill();
+
+    ctx.fillStyle = 'rgba(0, 188, 212, 0.1)';
+    ctx.beginPath();
+    ctx.moveTo(600, 0);
+    ctx.lineTo(500, groundY);
+    ctx.lineTo(700, groundY);
+    ctx.fill();
+}
+
+let matchOver = false;
+
+function showRoundBanner(text, cb) {
+    roundBanner.innerText = text;
+    roundBanner.classList.add('show');
+    setTimeout(() => {
+        roundBanner.classList.remove('show');
+        if (cb) cb();
+    }, 1200);
+}
+
+function startRoundTimer() {
+    clearInterval(roundTimerInterval);
+    roundTime = 60;
+    timerEl.innerText = roundTime;
+    roundTimerInterval = setInterval(() => {
+        if (paused || matchOver || !roundActive) return;
+        roundTime--;
+        timerEl.innerText = roundTime;
+        if (roundTime <= 0) {
+            clearInterval(roundTimerInterval);
+            endRound(mj.health >= prince.health ? 'mj' : 'prince', true);
+        }
+    }, 1000);
+}
+
+function updateWinsDisplay() {
+    document.getElementById('mj-wins').innerText = '●'.repeat(mjWins) + '○'.repeat(WINS_NEEDED - mjWins);
+    document.getElementById('prince-wins').innerText = '●'.repeat(princeWins) + '○'.repeat(WINS_NEEDED - princeWins);
+}
+
+function endRound(winnerKey) {
+    roundActive = false;
+    clearInterval(roundTimerInterval);
+    sfxRoundWin();
+
+    if (winnerKey === 'mj') mjWins++; else princeWins++;
+    updateWinsDisplay();
+
+    if (mjWins >= WINS_NEEDED || princeWins >= WINS_NEEDED) {
+        matchOver = true;
+        winnerDisplay.style.display = 'block';
+        const overallWinner = mjWins >= WINS_NEEDED ? 'MICHAEL JACKSON' : 'PRINCE';
+        winnerText.innerText = overallWinner + ' VENCEU A LUTA!';
+        winnerText.style.color = mjWins >= WINS_NEEDED ? '#00bcd4' : '#8a2be2';
+        matchText.innerText = `Placar final: MJ ${mjWins} x ${princeWins} Prince`;
+    } else {
+        showRoundBanner(winnerKey === 'mj' ? 'MJ VENCE O ROUND!' : 'PRINCE VENCE O ROUND!', () => {
+            round++;
+            roundNumEl.innerText = round;
+            const fighters = makeFighters();
+            mj = fighters.mj;
+            prince = fighters.prince;
+            document.getElementById('mj-health').style.width = '100%';
+            document.getElementById('prince-health').style.width = '100%';
+            document.getElementById('mj-super').style.width = '0%';
+            document.getElementById('prince-super').style.width = '0%';
+            showRoundBanner('ROUND ' + round, () => {
+                roundActive = true;
+                startRoundTimer();
+            });
+        });
+    }
+}
+
+function animate() {
+    window.requestAnimationFrame(animate);
+    if (matchOver) return;
+    if (paused) {
+        drawBackground();
+        mj.draw();
+        prince.draw();
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.font = '32px Segoe UI';
+        ctx.textAlign = 'center';
+        ctx.fillText('PAUSADO', canvas.width / 2, canvas.height / 2);
+        ctx.textAlign = 'left';
+        return;
+    }
+
+    if (hitStopFrames > 0) {
+        hitStopFrames--;
+        return;
+    }
+
+    ctx.save();
+    if (screenShake > 0) {
+        const dx = (Math.random() - 0.5) * screenShake;
+        const dy = (Math.random() - 0.5) * screenShake;
+        ctx.translate(dx, dy);
+        screenShake *= 0.85;
+        if (screenShake < 0.5) screenShake = 0;
+    }
+
+    drawBackground();
+
+    if (roundActive) {
+        mj.velocity.x = 0;
+        if (!mj.isBlocking) {
+            if (keys.a.pressed) { mj.velocity.x = -5; mj.facing = 'left'; }
+            else if (keys.d.pressed) { mj.velocity.x = 5; mj.facing = 'right'; }
+        }
+        updateAI();
+    } else {
+        mj.velocity.x = 0;
+    }
+
+    mj.update();
+    prince.update();
+    updateParticles();
+    drawParticles();
+
+    if (roundActive) {
+        if (checkCollision(mj, prince)) {
+            mj.attackHasLanded = true;
+            const dmg = mj.attackType === 'special' ? 20 : (mj.attackType === 'kick' ? 10 : 7);
+            prince.takeDamage(dmg, mj);
+        }
+        if (checkCollision(prince, mj)) {
+            prince.attackHasLanded = true;
+            const dmg = prince.attackType === 'special' ? 20 : (prince.attackType === 'kick' ? 10 : 7);
+            mj.takeDamage(dmg, prince);
+        }
+
+        if (mj.health <= 0 || prince.health <= 0) {
+            endRound(prince.health <= 0 ? 'mj' : 'prince');
+        }
+    }
+
+    ctx.restore();
+}
+
+window.addEventListener('keydown', (e) => {
+    if (matchOver) return;
+    switch (e.key.toLowerCase()) {
+        case 'a': keys.a.pressed = true; break;
+        case 'd': keys.d.pressed = true; break;
+        case 'w':
+            if (!mj.isJumping && !mj.isBlocking) {
+                mj.velocity.y = -18;
+                mj.isJumping = true;
+                sfxJump();
+            }
+            break;
+        case 'f': mj.attack('punch'); break;
+        case 'g': mj.attack('kick'); break;
+        case 'h': mj.attack('special'); break;
+        case 's': mj.isBlocking = true; break;
+        case 'p': paused = !paused; break;
+    }
+});
+
+window.addEventListener('keyup', (e) => {
+    switch (e.key.toLowerCase()) {
+        case 'a': keys.a.pressed = false; break;
+        case 'd': keys.d.pressed = false; break;
+        case 's': mj.isBlocking = false; break;
+    }
+});
+
+// Start
+updateWinsDisplay();
+showRoundBanner('ROUND ' + round, () => {
+    roundActive = true;
+    startRoundTimer();
+});
+animate();
+</script>
+</body>
+</html>
